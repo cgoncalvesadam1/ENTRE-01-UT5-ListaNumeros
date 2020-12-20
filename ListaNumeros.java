@@ -61,7 +61,7 @@ public class ListaNumeros
      * Hacer sin if
      */
     public boolean estaVacia() {
-        return true;
+        return pos == 0;
     }
 
     /**
@@ -175,17 +175,25 @@ public class ListaNumeros
      *  
      */
     public void invertir(int n) {
-        if(n == 1){
-            System.out.println("LA LISTA QUEDA IGUAL :");
-        }
-        else{
-            int invertir = lista.length / n;
-            for(int i = 0; i > (lista.length / 2); i++){
-                int inv = lista[i];
-                lista[i] = lista[invertir];
-                lista[invertir] = inv;
-                invertir--;
+        int maxNumeros = n;
+        int nGrupos = (lista.length / maxNumeros);
+        int contGrupos = 0;
+        int contNumeros = 0;
+        int[] grupito = new int[maxNumeros];
+        for (int i = 0; i < lista.length; i++) {
+            grupito[contNumeros] = lista[i];
+            if (++contNumeros >= maxNumeros) {
+                contGrupos++;
+                for (int j = 0; j < maxNumeros; j++) {
+                    lista[i - j] = grupito[j];
+                }
+                grupito = new int[maxNumeros];
+                contNumeros = 0;
             }
+        }
+        System.out.println("\nArray cambiado:");
+        for (int valore : lista) {
+            System.out.print("Lista " + lista);
         }
     }
 
@@ -197,6 +205,31 @@ public class ListaNumeros
      */
     public int[][] toArray2D() {
         int [][] ragged = new int [lista.length][];
+        if(lista.length == 1){
+            ragged[0] = new int[1];
+            ragged[0][0]= 1;
+        }
+        else if (lista.length == 2){
+            ragged[0] = new int[1];
+            ragged[1] = new int[2];
+            ragged[0][0] = 1;
+            ragged[0][1] = 1;
+            ragged[1][0] = 1;
+            ragged[1][1] = 1;
+        } 
+        else{
+            ragged[0] = new int[1];
+            ragged[1] = new int[2];
+            ragged[0][0] = 1;
+            ragged[0][1] = 1;
+            ragged[1][0] = 1;
+            ragged[1][1] = 1;
+        }
+        for (int i = 2; i < lista.length; i++ ){
+            ragged[i] = new int[i + 1];
+            ragged[i][0] = 1;
+            ragged[i][i] = 1;
+        }
         return ragged;
     }
 
@@ -219,6 +252,36 @@ public class ListaNumeros
         System.out.println(lista.toString());
         System.out.println("\t" + numero + " aparece en posiciones ");
         // seguir completando
+        int[] buscar = lista.buscarPosicionesDe(numero);
+        for(int i = 0; i < buscar.length; i++){
+            System.out.print("" + buscar[i]);
+        }
+        System.out.println();
 
+        System.out.println("--- buscarBinario() ---");
+        if(lista.buscarBinario(numero) >= 0){
+            System.out.println("Aparece en la lista");
+        }else{
+            System.out.println("No aparece en la lista");
+        }
+        System.out.println();
+
+        System.out.println("---invertir()---");
+        System.out.println("Sin invertir lista:");
+        System.out.println(lista.toString());
+        System.out.println("Lista invertida con grupos de 4 elementos y " + lista.getTotalNumeros() + " total de elementos");
+        lista.invertir(4);
+        System.out.println(lista.toString());
+        System.out.println();
+
+        System.out.println("---toArray2D()---\n");
+        int[][] array2D = lista.toArray2D();
+        for(int i = 0; i < array2D.length; i++){
+            System.out.print("Fila " + (i + 1) + ":");
+            for(int j = 0; j < array2D[i].length; j++){
+                System.out.print(array2D[i][j] + " ");
+            }
+            System.out.println();
+        }
     }
 }
